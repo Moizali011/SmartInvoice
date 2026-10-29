@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartBill Pro — Invoice & Quotation Generator</title>
+<style>
+:root{--bg:#f3f6fb;--panel:#fff;--ink:#172033;--muted:#69758b;--line:#e3e9f2;--blue:#3157d5;--blue2:#2444b7;--green:#16835d;--shadow:0 12px 34px rgba(26,42,80,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:700;transition:.15s}button:hover{transform:translateY(-1px)}.primary{background:var(--blue);color:white}.primary:hover{background:var(--blue2)}.secondary{background:#edf1fb;color:#273b7a}.danger{background:#fff0f0;color:#b42318}.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}.small{padding:6px 9px;font-size:12px}
+header{background:#101a35;color:white;padding:20px clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#7ea0ff,#4260df);display:grid;place-items:center;font-size:22px;font-weight:900}.brand h1{font-size:20px;margin:0}.brand p{margin:2px 0 0;color:#b9c5e6;font-size:12px}.header-actions{display:flex;gap:8px;flex-wrap:wrap}.header-actions .ghost{color:white;border-color:#354261}
+main{max-width:1450px;margin:auto;padding:24px clamp(12px,3vw,36px) 48px}.intro{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap}.intro h2{font-size:clamp(24px,3vw,32px);letter-spacing:-.7px;margin:0 0 5px}.intro p{margin:0;color:var(--muted)}.status{display:flex;align-items:center;gap:7px;color:#287d5a;font-size:13px;font-weight:700}.dot{width:8px;height:8px;border-radius:50%;background:#22b573}
+.layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:20px;align-items:start}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.panel-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-head h3{margin:0;font-size:16px}.panel-body{padding:20px}.section-title{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#71809a;font-weight:800;margin:0 0 12px}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}label{font-size:12px;font-weight:750;color:#536079}input,select,textarea{width:100%;border:1px solid #dce3ef;border-radius:9px;padding:10px 11px;background:#fff;color:var(--ink);outline:none;min-width:0}input:focus,select:focus,textarea:focus{border-color:#7a94f2;box-shadow:0 0 0 3px #3157d51a}textarea{resize:vertical;min-height:72px}.divider{border:0;border-top:1px solid var(--line);margin:21px 0}.items-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.items-wrap{overflow-x:auto}.items-table{width:100%;border-collapse:collapse;min-width:510px}.items-table th{text-align:left;color:#728099;font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:9px 6px;border-bottom:1px solid var(--line)}.items-table td{padding:8px 6px;border-bottom:1px solid #eef1f6;vertical-align:top}.items-table input{padding:8px 7px;border-radius:7px}.items-table .desc{min-width:140px}.items-table .qty{width:65px}.items-table .rate{width:105px}.amount{font-weight:750;white-space:nowrap;font-size:13px}.remove{color:#b42318;background:transparent;padding:5px}.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.hint{font-size:12px;color:var(--muted);margin-top:10px}
+.preview-panel{position:sticky;top:16px}.preview-top{background:#f9fbff;border-bottom:1px solid var(--line);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.preview-top strong{font-size:14px}.preview{padding:clamp(18px,3vw,34px);background:white;min-height:660px}.doc-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:3px solid #3157d5;padding-bottom:23px}.doc-brand{font-size:25px;font-weight:900;letter-spacing:-.8px;color:#1b2b56;overflow-wrap:anywhere}.doc-sub{color:#6c7890;font-size:12px;margin-top:5px;white-space:pre-line;overflow-wrap:anywhere}.doc-label{text-align:right;min-width:120px}.doc-label h2{margin:0;color:#3157d5;font-size:27px;letter-spacing:1px}.doc-label div{font-size:12px;color:#6c7890;margin-top:5px}.doc-meta{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:24px 0}.doc-meta h4{font-size:10px;color:#7a879c;text-transform:uppercase;letter-spacing:.12em;margin:0 0 9px}.doc-meta p{margin:3px 0;font-size:12px;overflow-wrap:anywhere}.doc-meta .name{font-size:15px;font-weight:800}.doc-table{width:100%;border-collapse:collapse;margin-top:3px}.doc-table th{background:#f2f5fc;color:#5b6882;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:11px 8px}.doc-table td{padding:12px 8px;border-bottom:1px solid #edf0f6;font-size:12px;overflow-wrap:anywhere}.doc-table th:last-child,.doc-table td:last-child{text-align:right}.doc-table th:nth-child(2),.doc-table td:nth-child(2){text-align:center}.totals{width:min(100%,270px);margin:20px 0 0 auto}.total-row{display:flex;justify-content:space-between;gap:15px;padding:6px 0;color:#5f6c83;font-size:12px}.total-row.grand{border-top:1px solid #dce3ef;margin-top:7px;padding-top:12px;color:#1b2b56;font-size:17px;font-weight:900}.notes{margin-top:27px;padding-top:16px;border-top:1px solid #edf0f6}.notes h4{margin:0 0 7px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64718a}.notes p{margin:0;font-size:12px;color:#5c687f;white-space:pre-line;overflow-wrap:anywhere}.doc-footer{margin-top:30px;text-align:center;color:#9aa4b5;font-size:10px}
+.records{margin-top:20px}.records-body{padding:0 20px 16px}.record{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #edf0f6}.record:last-child{border-bottom:0}.record strong{font-size:13px}.record small{display:block;color:var(--muted);margin-top:3px}.record-actions{display:flex;gap:6px;flex-shrink:0}.empty{color:var(--muted);font-size:13px;padding:18px 0}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#15213e;color:white;padding:12px 17px;border-radius:12px;box-shadow:var(--shadow);transition:.25s;z-index:20;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.preview-panel{position:static}.preview{min-height:auto}}@media(max-width:560px){main{padding:16px 10px 30px}.field-grid,.bottom-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel-body{padding:15px}.panel-head{padding:15px}.doc-top{flex-direction:column}.doc-label{text-align:left}.doc-meta{gap:12px}.doc-brand{font-size:21px}.preview{padding:18px 13px}.record{align-items:flex-start}.record-actions{flex-direction:column}}
+@media print{@page{size:A4;margin:12mm}body{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}header,.intro,.editor-panel,.records,.preview-top,.toast,.no-print{display:none!important}main{max-width:none;padding:0;margin:0}.layout{display:block}.preview-panel{position:static;border:0;box-shadow:none;border-radius:0}.preview{padding:0;min-height:0}.panel{border:0;box-shadow:none}.doc-table{page-break-inside:avoid}.doc-top,.doc-meta,.totals,.notes{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">S</div><div><h1>SmartBill Pro</h1><p>INVOICE & QUOTATION STUDIO</p></div></div>
+  <div class="header-actions"><button class="ghost" id="newBtn">＋ New document</button><button class="primary" id="saveTop">Save record</button></div>
+</header>
+<main>
+  <div class="intro"><div><h2>Make business documents, beautifully.</h2><p>Create an invoice or quotation in minutes. Your draft stays in this browser.</p></div><div class="status"><span class="dot"></span> Ready to use · Local mode</div></div>
+  <div class="layout">
+    <section class="panel editor-panel">
+      <div class="panel-head"><h3>Document details</h3><span class="hint" style="margin:0">Fields marked below update live</span></div>
+      <div class="panel-body">
+        <p class="section-title">Document setup</p>
+        <div class="field-grid">
+          <div class="field"><label for="docType">Document type</label><select id="docType"><option value="Invoice">Invoice</option><option value="Quotation">Quotation</option></select></div>
+          <div class="field"><label for="currency">Currency</label><select id="currency"><option value="USD">USD — US Dollar</option><option value="PKR" selected>PKR — Pakistani Rupee</option><option value="GBP">GBP — Pound</option><option value="EUR">EUR — Euro</option><option value="AED">AED — UAE Dirham</option><option value="INR">INR — Indian Rupee</option><option value="SAR">SAR — Saudi Riyal</option></select></div>
+          <div class="field"><label for="docNo">Document number</label><input id="docNo" value="INV-1001"></div>
+          <div class="field"><label for="docDate">Issue date</label><input id="docDate" type="date"></div>
+          <div class="field"><label for="dueDate" id="dueLabel">Due date</label><input id="dueDate" type="date"></div>
+          <div class="field"><label for="status">Payment status</label><select id="status"><option>Unpaid</option><option>Paid</option><option>Partially paid</option></select></div>
+        </div>
+        <hr class="divider">
+        <p class="section-title">Your business</p>
+        <div class="field-grid">
+          <div class="field"><label for="business">Business / seller name</label><input id="business" placeholder="e.g. Moiz Digital Studio"></div>
+          <div class="field"><label for="businessEmail">Business email</label><input id="businessEmail" type="email" placeholder="you@example.com"></div>
+          <div class="field full"><label for="businessAddress">Business address</label><textarea id="businessAddress" placeholder="Street, city, country"></textarea></div>
+        </div>
+        <hr class="divider">
+        <p class="section-title">Client details</p>
+        <div class="field-grid">
+          <div class="field"><label for="client">Client / company name</label><input id="client" placeholder="Client name"></div>
+          <div class="field"><label for="clientEmail">Client email</label><input id="clientEmail" type="email" placeholder="client@example.com"></div>
+          <div class="field full"><label for="clientAddress">Client address</label><textarea id="clientAddress" placeholder="Client address"></textarea></div>
+        </div>
+        <hr class="divider">
+        <div class="items-head"><p class="section-title" style="margin:0">Items & services</p><button class="secondary small" id="addItem">＋ Add item</button></div>
+        <div class="items-wrap"><table class="items-table"><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th><th></th></tr></thead><tbody id="itemsBody"></tbody></table></div>
+        <p class="hint">Enter quantity and unit price. Line totals update automatically.</p>
+        <hr class="divider">
+        <p class="section-title">Tax & payment</p>
+        <div class="bottom-grid">
+          <div class="field"><label for="tax">Tax (%)</label><input id="tax" type="number" min="0" max="100" step="0.01" value="0"></div>
+          <div class="field"><label for="discount">Discount (fixed amount)</label><input id="discount" type="number" min="0" step="0.01" value="0"></div>
+          <div class="field full"><label for="payment">Payment instructions</label><textarea id="payment" placeholder="Bank / Easypaisa / payment terms (optional)"></textarea></div>
+          <div class="field full"><label for="notes">Notes / terms</label><textarea id="notes" placeholder="Thank you for your business. Add validity terms for quotations."></textarea></div>
+        </div>
+        <div class="actions"><button class="primary" id="saveBtn">Save document</button><button class="secondary" id="pdfBtn">Print / Save PDF</button><button class="ghost" id="clearBtn">Clear form</button></div>
+        <p class="hint">Privacy note: this starter version stores records in this browser only. It does not send data to a server.</p>
+      </div>
+    </section>
+    <section class="panel preview-panel">
+      <div class="preview-top"><strong>Live document preview</strong><button class="secondary small" id="previewPdf">Print / PDF ↗</button></div>
+      <div class="preview" id="preview">
+        <div class="doc-top"><div><div class="doc-brand" id="pBusiness">Your Business Name</div><div class="doc-sub" id="pBusinessInfo">Business address and email</div></div><div class="doc-label"><h2 id="pType">INVOICE</h2><div id="pNumber">INV-1001</div></div></div>
+        <div class="doc-meta"><div><h4>Bill to</h4><p class="name" id="pClient">Client name</p><p id="pClientInfo">Client address and email</p></div><div><h4 id="pDatesTitle">Document dates</h4><p><b>Issued:</b> <span id="pDate"></span></p><p><b id="pDueLabel">Due:</b> <span id="pDue"></span></p><p><b>Status:</b> <span id="pStatus">Unpaid</span></p></div></div>
+        <table class="doc-table"><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody id="pItems"></tbody></table>
+        <div class="totals"><div class="total-row"><span>Subtotal</span><strong id="pSubtotal">PKR 0.00</strong></div><div class="total-row"><span>Discount</span><strong id="pDiscount">PKR 0.00</strong></div><div class="total-row"><span id="pTaxLabel">Tax (0%)</span><strong id="pTax">PKR 0.00</strong></div><div class="total-row grand"><span>Total</span><strong id="pTotal">PKR 0.00</strong></div></div>
+        <div class="notes" id="paymentBlock"><h4>Payment instructions</h4><p id="pPayment">—</p></div><div class="notes" id="notesBlock"><h4>Notes & terms</h4><p id="pNotes">—</p></div>
+        <div class="doc-footer">Generated with SmartBill Pro</div>
+      </div>
+    </section>
+  </div>
+  <section class="panel records">
+    <div class="panel-head"><h3>Saved documents</h3><div style="display:flex;gap:8px;align-items:center"><input id="searchRecords" placeholder="Search records…" style="width:170px;padding:8px"><button class="ghost small" id="exportData">Export backup</button><button class="ghost small" id="importBtn">Import</button><input id="importFile" type="file" accept="application/json" hidden></div></div>
+    <div class="records-body" id="recordsBody"><div class="empty">No saved documents yet. Create one above and click “Save document”.</div></div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = 'smartbill_pro_records_v1';
+let items = [{description:'Website design',qty:1,rate:25000}];
+let savedRecords = [];
+try { savedRecords = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); if(!Array.isArray(savedRecords)) savedRecords=[]; } catch(e) { savedRecords=[]; }
+const today = new Date();
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+$('docDate').value = iso(today);
+let due = new Date(today); due.setDate(due.getDate()+14); $('dueDate').value=iso(due);
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function num(v){const n=Number(v);return Number.isFinite(n)?Math.max(0,n):0;}
+function money(v){const c=$('currency').value;try{return new Intl.NumberFormat('en-US',{style:'currency',currency:c,minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v)||0)}catch(e){return c+' '+(Number(v)||0).toFixed(2)}}
+function dateText(v){if(!v)return '—';const d=new Date(v+'T00:00:00');return Number.isNaN(d.getTime())?v:d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}
+function getData(){return {id:$('docNo').value.trim()||('DOC-'+Date.now()),type:$('docType').value,currency:$('currency').value,docNo:$('docNo').value.trim(),docDate:$('docDate').value,dueDate:$('dueDate').value,status:$('status').value,business:$('business').value,businessEmail:$('businessEmail').value,businessAddress:$('businessAddress').value,client:$('client').value,clientEmail:$('clientEmail').value,clientAddress:$('clientAddress').value,items:items.map(i=>({...i,qty:num(i.qty),rate:num(i.rate)})),tax:num($('tax').value),discount:num($('discount').value),payment:$('payment').value,notes:$('notes').value,updatedAt:new Date().toISOString()};}
+function calc(d=getData()){const subtotal=d.items.reduce((s,i)=>s+num(i.qty)*num(i.rate),0);const discount=Math.min(subtotal,num(d.discount));const taxable=Math.max(0,subtotal-discount);const tax=taxable*Math.min(100,num(d.tax))/100;return {subtotal,discount,tax,total:taxable+tax};}
+function renderItems(){const body=$('itemsBody');body.innerHTML='';items.forEach((it,idx)=>{const tr=document.createElement('tr');tr.innerHTML=`<td><input class="desc" aria-label="Item description" data-i="${idx}" data-k="description" value="${escapeHtml(it.description)}" placeholder="Service or product"></td><td><input class="qty" aria-label="Quantity" data-i="${idx}" data-k="qty" type="number" min="0" step="any" value="${escapeHtml(it.qty)}"></td><td><input class="rate" aria-label="Unit price" data-i="${idx}" data-k="rate" type="number" min="0" step="any" value="${escapeHtml(it.rate)}"></td><td class="amount" id="line${idx}">${money(num(it.qty)*num(it.rate))}</td><td><button class="remove" aria-label="Remove item" data-remove="${idx}">×</button></td>`;body.appendChild(tr);});}
+function renderPreview(){const d=getData(),c=calc(d);$('pBusiness').textContent=d.business||'Your Business Name';$('pBusinessInfo').textContent=[d.businessAddress,d.businessEmail].filter(Boolean).join('\\n')||'Business address and email';$('pType').textContent=d.type.toUpperCase();$('pNumber').textContent=d.docNo||'—';$('pClient').textContent=d.client||'Client name';$('pClientInfo').textContent=[d.clientAddress,d.clientEmail].filter(Boolean).join('\\n')||'Client address and email';$('pDate').textContent=dateText(d.docDate);$('pDue').textContent=dateText(d.dueDate);$('pStatus').textContent=d.status;$('pDueLabel').textContent=d.type==='Quotation'?'Valid until:':'Due:';$('pDatesTitle').textContent=d.type==='Quotation'?'Quotation dates':'Document dates';$('pSubtotal').textContent=money(c.subtotal);$('pDiscount').textContent='− '+money(c.discount);$('pTaxLabel').textContent=`Tax (${num(d.tax)}%)`;$('pTax').textContent=money(c.tax);$('pTotal').textContent=money(c.total);$('pPayment').textContent=d.payment||'—';$('pNotes').textContent=d.notes||'—';$('paymentBlock').style.display=d.payment?'block':'none';$('notesBlock').style.display=d.notes?'block':'none';const tb=$('pItems');tb.innerHTML='';d.items.forEach(i=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHtml(i.description||'Item')}</td><td>${num(i.qty)}</td><td>${money(i.rate)}</td><td>${money(num(i.qty)*num(i.rate))}</td>`;tb.appendChild(tr);});if(!d.items.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:#7b879b">No items added</td></tr>';}}
+function update(){renderPreview();items.forEach((it,i)=>{const el=$('line'+i);if(el)el.textContent=money(num(it.qty)*num(it.rate));});}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+function save(){const d=getData();if(!d.docNo){toast('Please enter a document number.');$('docNo').focus();return;}const idx=savedRecords.findIndex(r=>r.docNo===d.docNo);if(idx>=0){d.createdAt=savedRecords[idx].createdAt||d.updatedAt;savedRecords[idx]=d;}else{d.createdAt=d.updatedAt;savedRecords.unshift(d);}try{localStorage.setItem(STORAGE_KEY,JSON.stringify(savedRecords));renderRecords();toast('Document saved in this browser.');}catch(e){toast('Could not save: browser storage may be full.');}}
+function renderRecords(){const q=$('searchRecords').value.toLowerCase().trim(),body=$('recordsBody');const list=savedRecords.filter(r=>[r.docNo,r.type,r.client,r.business].join(' ').toLowerCase().includes(q));if(!list.length){body.innerHTML='<div class="empty">No matching saved documents.</div>';return;}body.innerHTML='';list.forEach(r=>{const row=document.createElement('div');row.className='record';const amount=calc(r).total;row.innerHTML=`<div><strong>${escapeHtml(r.docNo||'Untitled')} · ${escapeHtml(r.type)}</strong><small>${escapeHtml(r.client||'No client')} · ${moneyFor(r.currency,amount)} · ${dateText(r.docDate)}</small></div><div class="record-actions"><button class="secondary small" data-open="${escapeHtml(r.docNo)}">Open</button><button class="danger small" data-delete="${escapeHtml(r.docNo)}">Delete</button></div>`;body.appendChild(row);});}
+function moneyFor(c,v){try{return new Intl.NumberFormat('en-US',{style:'currency',currency:c||'PKR'}).format(v||0)}catch(e){return (c||'PKR')+' '+(v||0).toFixed(2)}}
+function loadRecord(id){const d=savedRecords.find(r=>r.docNo===id);if(!d)return;['docType','currency','docNo','docDate','dueDate','status','business','businessEmail','businessAddress','client','clientEmail','clientAddress','tax','discount','payment','notes'].forEach(k=>{if($(k))$(k).value=d[k]??'';});items=(d.items||[]).map(i=>({...i}));renderItems();update();window.scrollTo({top:0,behavior:'smooth'});toast('Record opened.');}
+function clearForm(){if(!confirm('Clear the current form? Unsaved changes will be lost.'))return;['business','businessEmail','businessAddress','client','clientEmail','clientAddress','payment','notes'].forEach(k=>$(k).value='');$('docType').value='Invoice';$('status').value='Unpaid';$('tax').value='0';$('discount').value='0';$('docNo').value='INV-'+(1001+savedRecords.length);$('docDate').value=iso(new Date());const d=new Date();d.setDate(d.getDate()+14);$('dueDate').value=iso(d);items=[{description:'',qty:1,rate:0}];renderItems();update();}
+function printDoc(){renderPreview();window.print();}
+$('itemsBody').addEventListener('input',e=>{const t=e.target;if(t.dataset.i===undefined)return;const i=Number(t.dataset.i),k=t.dataset.k;if(!items[i])return;items[i][k]=k==='description'?t.value:t.value;update();});
+$('itemsBody').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(!b)return;items.splice(Number(b.dataset.remove),1);renderItems();update();});
+$('addItem').addEventListener('click',()=>{items.push({description:'',qty:1,rate:0});renderItems();update();});
+document.querySelector('.editor-panel').addEventListener('input',e=>{if(e.target.closest('#itemsBody'))return;update();});
+document.querySelector('.editor-panel').addEventListener('change',update);
+$('docType').addEventListener('change',()=>{const q=$('docType').value==='Quotation';$('dueLabel').textContent=q?'Valid until':'Due date';$('status').disabled=q;if(q)$('status').value='Unpaid';update();});
+$('saveBtn').addEventListener('click',save);$('saveTop').addEventListener('click',save);$('pdfBtn').addEventListener('click',printDoc);$('previewPdf').addEventListener('click',printDoc);$('clearBtn').addEventListener('click',clearForm);$('newBtn').addEventListener('click',clearForm);$('searchRecords').addEventListener('input',renderRecords);
+$('recordsBody').addEventListener('click',e=>{const o=e.target.closest('[data-open]'),d=e.target.closest('[data-delete]');if(o)loadRecord(o.dataset.open);if(d){const id=d.dataset.delete;if(confirm('Delete saved document '+id+'?')){savedRecords=savedRecords.filter(r=>r.docNo!==id);localStorage.setItem(STORAGE_KEY,JSON.stringify(savedRecords));renderRecords();toast('Record deleted.');}}});
+$('exportData').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(savedRecords,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='smartbill-backup.json';a.click();URL.revokeObjectURL(url);toast('Backup exported.');});
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const arr=JSON.parse(await f.text());if(!Array.isArray(arr))throw new Error('invalid');const map=new Map(savedRecords.map(r=>[r.docNo,r]));arr.forEach(r=>{if(r&&r.docNo)map.set(r.docNo,r)});savedRecords=Array.from(map.values());localStorage.setItem(STORAGE_KEY,JSON.stringify(savedRecords));renderRecords();toast('Backup imported.');}catch(err){toast('Invalid backup file.');}e.target.value='';});
+renderItems();update();renderRecords();
+</script>
+</body>
+</html>
